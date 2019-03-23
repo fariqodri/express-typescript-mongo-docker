@@ -3,9 +3,10 @@ services:
   app:
     container_name: express-mongo
     restart: always
+    command: npm run dev
     build: ./
     ports:
-      - "80:7000"
+      - "7000:7000"
     volumes:
       - .:/app
       - /app/node_modules
