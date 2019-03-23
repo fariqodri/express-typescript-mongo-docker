@@ -1,5 +1,7 @@
+import chai = require("chai")
 import http = require('chai-http');
 import { expect } from 'chai';
+import {test} from "mocha"
 
 import app from '../config/app';
 import { IndexedDataModel, KursModel } from '../models';
@@ -28,10 +30,10 @@ describe('Crawl API', () => {
             .get('/api/indexing')
             .then(res => {
                 expect(res.status).to.equal(200);
-                IndexedDataModel.count({}, (_, count) =>
+                IndexedDataModel.estimatedDocumentCount((_, count) =>
                     expect(count).to.greaterThan(0)
                 );
-                KursModel.count({}, (_, count) =>
+                KursModel.estimatedDocumentCount((_, count) =>
                     expect(count).to.greaterThan(0)
                 );
                 expect(res.body).to.have.property("data")
@@ -64,7 +66,7 @@ describe('Delete record by date', () => {
             .request(app)  
             .delete(`/api/kurs/${date}`)
             .then(res => {
-                IndexedDataModel.count({datetime: new Date(date)}, (_, count) => expect(count).to.equal(0))
+                IndexedDataModel.countDocuments({datetime: new Date(date)}, (_, count) => expect(count).to.equal(0))
                 expect(res.status).to.equal(200)
                 expect(res.body).to.have.property("deleted")
                 expect(res.body.deleted).to.be.an("array")

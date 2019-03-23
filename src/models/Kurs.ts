@@ -24,7 +24,7 @@ export const KursSchema = new Schema({
     },
     kurs_type: {
         type: Schema.Types.String,
-        enum: KursTypes
+        enum: ["beli", "jual"]
     }
 })
 
